@@ -1,0 +1,50 @@
+<h2 class="accordion-header" id="panelsStayOpen-headingOne">
+    <button class="accordion-button {{ $ctrl.methodData.method }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $ctrl.methodData.id }}" aria-expanded="true" aria-controls="{{ $ctrl.methodData.id }}">
+        <div class="accordion-button-info">
+            <img src="icon/view.png" alt="show" ng-if="$ctrl.methodData.type == 'public'">
+            <img src="icon/private.png" alt="hide" ng-if="$ctrl.methodData.type == 'private'">
+            <div class="method-name">{{ $ctrl.methodData.method }}</div>
+            <div>{{ $ctrl.methodData.name }}</div>
+        </div>
+    </button>
+</h2>
+    
+<div id="{{ $ctrl.methodData.id }}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+    <div class="accordion-body">
+        <div class="info">
+            <h3>Info</h3>
+            <hr>
+            <p>{{ $ctrl.methodData.info }}</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-title">
+                <img src="icon/security.png" alt="security" ng-show="$ctrl.methodData.form.encryption == true">
+                <h3>Form</h3>
+            </div>
+            <hr>
+            <form ng-submit="$ctrl.submitForm()">
+                <div 
+                    class="input-group mb-3"
+                    ng-repeat="field in $ctrl.methodData.form.fields track by $index"
+                    >
+                    <span class="input-group-text">{{field.text}}</span>
+                    <input type="{{field.type}}" class="form-control" name="{{field.name}}">
+                </div>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    
+        <div class="json-container" id="jsonContainer"><pre>{{$ctrl.response}}</pre></div>
+
+        <div>
+            <h3>Code</h3>
+            <hr>
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode()">Copy</button>
+                <pre><code id="insert_code" data-script="1">{{$ctrl.methodData.form.SubmitFunc}}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
