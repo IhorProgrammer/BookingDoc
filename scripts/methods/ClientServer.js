@@ -1,4 +1,4 @@
-const ServerInfoData = 
+const ClientServerInfoData = 
 {
     name: "Сервер клієнтів",
     url: "http://____/api/client",
@@ -20,7 +20,7 @@ const ServerInfoData =
                     {name: "login", text: "login", type: "text"},
                     {name: "password", text: "password", type: "password"},   
                 ],
-                SubmitFunc: AuthFunc,
+                SubmitFunc: ClientServerInfoData__AuthFunc,
             }
 
         },
@@ -57,13 +57,13 @@ const ServerInfoData =
                     {name: "password", type: "password", text:"Пароль"},
 
                 ],
-                SubmitFunc: RegUser,
+                SubmitFunc: ClientServerInfoData__RegUser,
             }
-        },
+        },        
     ]
 }
 
-async function  AuthFunc( connection ) {
+async function  ClientServerInfoData__AuthFunc( connection ) {
     event.preventDefault();
 
     //отримання  UserAgent
@@ -108,7 +108,7 @@ async function  AuthFunc( connection ) {
 }
 
 
-async function RegUser( connection ) {
+async function ClientServerInfoData__RegUser( connection ) {
     //отримання  UserAgent
     const userAgent = navigator.userAgent; 
     // Отримуємо форму
@@ -152,4 +152,9 @@ async function RegUser( connection ) {
 
 
 
+}
+
+
+async function AuthFacebook( connection ) {
+    FB.login() 
 }

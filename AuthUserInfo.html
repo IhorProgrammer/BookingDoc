@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserInfo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        main{
+            margin: 20px;
+        }
+        p{
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <main class="container" id="container">
+
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            setDATA();
+        })
+
+        function setDATA() {
+            const url = window.location.href;
+            const urlParams = new URLSearchParams(new URL(url).search);
+
+            // Витягування значень параметрів
+            const avatar = urlParams.get('avatar');
+            const givenName = urlParams.get('given_name');
+            const familyName = urlParams.get('family_name');
+            const nickname = urlParams.get('nickname');
+            const email = urlParams.get('email');
+            const phone = urlParams.get('phone');
+            const birthday = urlParams.get('birthday');
+            const gender = urlParams.get('gender');
+            const citizenship = urlParams.get('citizenship');
+
+
+            document.getElementById("container").innerHTML = 
+            `
+                <img src="${avatar}" class="rounded " alt="avatar">
+                <ul>
+                    <li><p><b>avatar: </b>${avatar}</p></li>
+                    <li><p><b>given_name: </b>${givenName}</p></li>
+                    <li><p><b>family_name: </b>${familyName}</p></li>
+                    <li><p><b>nickname: </b>${nickname}</p></li>
+                    <li><p><b>email: </b>${email}</p></li>
+                    <li><p><b>phone: </b>${phone}</p></li>
+                    <li><p><b>birthday: </b>${birthday}</p></li>
+                    <li><p><b>gender: </b>${gender}</p></li>
+                    <li><p><b>citizenship: </b>${citizenship}</p></li>
+
+                </ul>
+            `
+        }
+
+        
+
+    </script>
+
+
+</body>
+</html>
