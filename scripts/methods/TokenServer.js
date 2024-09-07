@@ -89,6 +89,11 @@ const TokenServerInfoData =
             `,
             form: 
             {
+                encryption: true,
+                fields: 
+                [
+                    {name: "token_id", text: "ID TOKEN", type: "text"},
+                ],
                 SubmitFunc: TokenServerInfoData__DeleteSession,
             }
         },
@@ -126,12 +131,86 @@ const TokenServerInfoData =
 
 
 async function TokenServerInfoData__GetSession( connection ) {
+    event.preventDefault();
+
+    //отримання  UserAgent
+    const userAgent = navigator.userAgent; 
+    //отримання даних
+    const userDataString = localStorage.getItem('user_data');
+    const userData = JSON.parse(userDataString);
+    const userId = userData.id;
     
+    const data = { "data": { "client_id": userId }, "user_agent": userAgent };
+
+    // отримання солі
+    const salt = localStorage.getItem('dc_server_salt');
+    //Отримання токену
+    const token = localStorage.getItem('dc_auth_key');
+    if( salt == null || token == null ) {
+        alert("Користувач не отримав унікальні токени")
+        return;
+    }
+    
+    //шифрування даних
+    const { encrypted, iv } = await AES.encrypt(JSON.stringify(data), salt);
+    // Формуємо URL з зашифрованими даними
+    const url = `${connection}/session/${encodeURIComponent(encrypted)}/${encodeURIComponent(iv)}`;
+    //Запит
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const res = await response.json();
+        return res;
+    } catch(error) {
+        return error;
+    }
 }
 
 
 async function TokenServerInfoData__DeleteSession( connection ) {
+    event.preventDefault();
+
+    //отримання  UserAgent
+    const userAgent = navigator.userAgent; 
+    //отримання id токену
+    const form = event.target; // Отримуємо форму
+    const tokenId = form.elements['token_id'].value;
+
+    //підготовка даних до шифровання
+    const data = { "data": { "token_id": tokenId }, "user_agent": userAgent };
+
+    // отримання солі
+    const salt = localStorage.getItem('dc_server_salt');
+    //Отримання токену
+    const token = localStorage.getItem('dc_auth_key');
+    if( salt == null || token == null ) {
+        alert("Користувач не отримав унікальні токени")
+        return;
+    }
     
+    //шифрування даних
+    const { encrypted, iv } = await AES.encrypt(JSON.stringify(data), salt);
+    // Формуємо URL з зашифрованими даними
+    const url = `${connection}/session/${encodeURIComponent(encrypted)}/${encodeURIComponent(iv)}`;
+    //Запит
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const res = await response.json();
+        return res;
+    } catch(error) {
+        return error;
+    }
 }
 
 async function TokenServerInfoData__GetToken( connection ) {
@@ -154,8 +233,9 @@ async function TokenServerInfoData__GetToken( connection ) {
             localStorage.setItem('dc_auth_key', res.data.token);
             localStorage.setItem('dc_server_salt', res.data.salt);
         }
+        return res;
     } catch (error) {
-        console.error('Помилка:', error);
+        return 'Помилка:' + error;
     }
 }
 

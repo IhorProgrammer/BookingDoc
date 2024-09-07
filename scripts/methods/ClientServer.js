@@ -117,7 +117,7 @@ async function ClientServerInfoData__RegUser( connection ) {
     
     const formData = new FormData(event.target);
     formData.set("gender", form.elements['gender'].value = "M"? true : false )
-
+    formData.append("user_agent", userAgent )
 
     //Отримання токену
     const token = localStorage.getItem('dc_auth_key');
@@ -125,11 +125,9 @@ async function ClientServerInfoData__RegUser( connection ) {
         alert("Користувач не отримав унікальні токени")
         return;
     }
-    // Формуємо URL з зашифрованими даними
-    const url = `${connection}/${encodeURIComponent(userAgent)}`;
     //Запит
     try {
-        const response = await fetch(url, {
+        const response = await fetch(connection, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

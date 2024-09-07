@@ -1,8 +1,8 @@
 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
     <button class="accordion-button {{ $ctrl.methodData.method }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $ctrl.methodData.id }}" aria-expanded="true" aria-controls="{{ $ctrl.methodData.id }}">
         <div class="accordion-button-info">
-            <img src="icon/view.png" alt="show" ng-if="$ctrl.methodData.type == 'public'">
-            <img src="icon/private.png" alt="hide" ng-if="$ctrl.methodData.type == 'private'">
+            <img src="icon/viewn.png" alt="show" ng-if="$ctrl.methodData.type == 'public'">
+            <img src="icon/privaten.png" alt="hide" ng-if="$ctrl.methodData.type == 'private'">
             <div class="method-name">{{ $ctrl.methodData.method }}</div>
             <div>{{ $ctrl.methodData.name }}</div>
         </div>
@@ -19,7 +19,7 @@
 
         <div class="form-container">
             <div class="form-title">
-                <img src="icon/security.png" alt="security" ng-show="$ctrl.methodData.form.encryption == true">
+                <img src="icon/securityn.png" alt="security" ng-show="$ctrl.methodData.form.encryption == true">
                 <h3>Form</h3>
             </div>
             <hr>

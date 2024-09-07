@@ -65,10 +65,10 @@ main{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: white;
 }
 .accordion-button-info img {
     width: 40px;
-    height: 38px;
     margin-right: 20px;
 }
 .code-container {
@@ -133,4 +133,34 @@ main{
     white-space: pre-wrap;
     line-height: 1.5;
     font-family: 'Courier New', Courier, monospace;
+}
+
+
+
+
+* {
+
+    font-family: "Shantell Sans", cursive !important;
+
+}
+
+h1, h2, h3, h4, h5, h5, p, a, li::marker, span.neon, .neon {
+    color: #57FF44 !important;
+    filter: drop-shadow(1px 1px 0.1px #ffffff51);
+}
+
+body {
+    background-color: #0C1316;
+}
+
+.vertial-line-neon {
+    position: fixed;
+    border-radius: 10px;
+    left: 20px;
+    top: 100px;
+    height: 80%;
+    width: 10px;
+    box-shadow: 1px 1px 20px #DB1BB5;
+    background: rgb(219,27,181);
+    background: linear-gradient(180deg, rgba(219,27,181,1) 0%, rgba(176,25,176,1) 52%, rgba(136,27,219,1) 100%);
 }
