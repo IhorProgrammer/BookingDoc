@@ -59,14 +59,50 @@ const ClientServerInfoData =
                 ],
                 SubmitFunc: ClientServerInfoData__RegUser,
             }
-        },        
+        },      
+        {
+            id: "POST_2",
+            method: "POST",
+            connection_name: "ClientServer",
+            name: "Зміна даних",
+            type: "public",
+            info:  `
+                Зміна даних користувача використовує валідацію даних, про які буде невідомо, користувачу який буде реєструватись без підказок, тому завчасно потрібно подбати про те що валідація на стороні Frontend працювала. При успішній операції код (201). 
+                real_name - Не більше 32 символів, 1 літера з великою інші з маленької, без пробілів.
+                nickname - Не більше 16 символів, 1 і більше латинська літера. 
+                email - Звичайна пошта за стандартами написання пройде валідацію example@gmail.com. 
+                phone - Потрібно писати номера починаючи з +, а також без пробілів і інших символів. 
+                birthday - 07.08.2024 or 07/08/2024. 
+                gender -  False(0) - жіноча стать, True(1) - чоловіча стать. 
+                citizenship -  назва міста проживання. 
+                password -   більше 8 символів, хочаб велика або маленька літера, а також цифри. 
+            `,
+            form: 
+            {
+                encryption: true,
+                fields: 
+                [
+                    {name: "avatar", type : "file", text:"Аватар"},
+                    {name: "real_name", type: "text", text:"ІПБ"},
+                    {name: "new_nickname", type: "text", text:"Нікнейм (login) "},
+                    {name: "email", type: "email", text:"Email"},
+                    {name: "phone", type: "tel", text:"Телефон"},
+                    {name: "birthday", type: "date", text:"Дата народження"},
+                    {name: "gender", type: "text", text:"Ви чоловік?"},
+                    {name: "citizenship", type: "text", text:"Місто проживання"},
+                    {name: "password", type: "password", text:"Пароль"},
+
+                ],
+                SubmitFunc: ClientServerInfoData__ChangeUser,
+            }
+        },      
     ]
 }
 
 async function  ClientServerInfoData__AuthFunc( connection ) {
     event.preventDefault();
 
-    //отримання  UserAgent
+    //отримання  UserAgent 
     const userAgent = navigator.userAgent; 
     //отримання даних
     const form = event.target; // Отримуємо форму
@@ -87,6 +123,7 @@ async function  ClientServerInfoData__AuthFunc( connection ) {
     const { encrypted, iv } = await AES.encrypt(JSON.stringify(data), salt);
     // Формуємо URL з зашифрованими даними
     const url = `${connection}/${encodeURIComponent(encrypted)}/${encodeURIComponent(iv)}`;
+    
     //Запит
     try {
         const response = await fetch(url, {
@@ -146,10 +183,53 @@ async function ClientServerInfoData__RegUser( connection ) {
     } catch(error) {
         return error;
     }
+}
 
 
+async function ClientServerInfoData__ChangeUser( connection ) {
+    //отримання  UserAgent
+    const userAgent = navigator.userAgent; 
+    // Отримуємо форму
+    const form = event.target; 
+    //_________________ВАЛІДАЦІЯ ДАНИХ______________________
+    
+    const formData = new FormData(event.target);
+    const userData = JSON.parse(localStorage.getItem('user_data'));
 
+    formData.set("id", userData.id )
+    formData.set("nickname", userData.nickname )
 
+    formData.set("gender", form.elements['gender'].value = "M"? true : false )
+    formData.append("user_agent", userAgent )
+    //Отримання токену
+    const token = localStorage.getItem('dc_auth_key');
+    if( token == null ) {
+        alert("Користувач не отримав унікальні токени")
+        return;
+    }
+
+    //Запит 
+    try {
+        const response = await fetch( `${connection}/change`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        });
+        const res = await response.json();
+        if(res.meta.code === 200) {
+            localStorage.setItem("user_data", JSON.stringify(res.data));
+            
+            //Одразу йде авторизація користувача, якщо операція успішна
+            //AuthFunc(connection);
+        }
+
+        return res;
+    } catch(error) {
+        console.error(error)
+        return error;
+    }
 }
 
 

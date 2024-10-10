@@ -28,31 +28,35 @@
             const urlParams = new URLSearchParams(new URL(url).search);
 
             // Витягування значень параметрів
-            const avatar = urlParams.get('avatar');
-            const givenName = urlParams.get('given_name');
-            const familyName = urlParams.get('family_name');
-            const nickname = urlParams.get('nickname');
-            const email = urlParams.get('email');
-            const phone = urlParams.get('phone');
-            const birthday = urlParams.get('birthday');
-            const gender = urlParams.get('gender');
-            const citizenship = urlParams.get('citizenship');
+            const res = {
+                id: urlParams.get('id'),
+                avatar: urlParams.get('avatar'),
+                given_name: urlParams.get('given_name'),
+                family_name: urlParams.get('family_name'),
+                nickname: urlParams.get('nickname'),
+                email: urlParams.get('email'),
+                phone: urlParams.get('phone'),
+                birthday: urlParams.get('birthday'),
+                gender: urlParams.get('gender'),
+                citizenship: urlParams.get('citizenship'),
+            }
 
+            localStorage.setItem("user_data", JSON.stringify(res));
 
             document.getElementById("container").innerHTML = 
             `
-                <img src="${avatar}" class="rounded " alt="avatar">
+                <img src="${res.avatar}" class="rounded " alt="avatar">
                 <ul>
-                    <li><p><b>avatar: </b>${avatar}</p></li>
-                    <li><p><b>given_name: </b>${givenName}</p></li>
-                    <li><p><b>family_name: </b>${familyName}</p></li>
-                    <li><p><b>nickname: </b>${nickname}</p></li>
-                    <li><p><b>email: </b>${email}</p></li>
-                    <li><p><b>phone: </b>${phone}</p></li>
-                    <li><p><b>birthday: </b>${birthday}</p></li>
-                    <li><p><b>gender: </b>${gender}</p></li>
-                    <li><p><b>citizenship: </b>${citizenship}</p></li>
-
+                    <li><p><b>id: </b>${res.id}</p></li>
+                    <li><p><b>avatar: </b>${res.avatar}</p></li>
+                    <li><p><b>given_name: </b>${res.givenName}</p></li>
+                    <li><p><b>family_name: </b>${res.familyName}</p></li>
+                    <li><p><b>nickname: </b>${res.nickname}</p></li>
+                    <li><p><b>email: </b>${res.email}</p></li>
+                    <li><p><b>phone: </b>${res.phone}</p></li>
+                    <li><p><b>birthday: </b>${res.birthday}</p></li>
+                    <li><p><b>gender: </b>${res.gender}</p></li>
+                    <li><p><b>citizenship: </b>${res.citizenship}</p></li>
                 </ul>
             `
         }

@@ -1,4 +1,4 @@
 const CONNCETION  = {
-    ClientServer: "http://localhost:5104",
-    TokenServer: "http://localhost:5141",
+    ClientServer: "http://localhost:5082",
+    TokenServer: "http://localhost:5083",
 }

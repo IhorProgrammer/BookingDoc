@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: db_mysql
--- Время создания: Авг 21 2024 г., 15:16
+-- Время создания: Окт 10 2024 г., 12:59
 -- Версия сервера: 8.0.39
 -- Версия PHP: 8.2.22
 
@@ -142,18 +142,20 @@ CREATE TABLE `cities` (
 
 CREATE TABLE `client_data` (
   `id` varchar(36) NOT NULL,
-  `avatar` varchar(36) DEFAULT NULL,
-  `real_name` varchar(32) NOT NULL,
-  `nickname` varchar(16) NOT NULL,
+  `gmail_id` varchar(24) DEFAULT NULL,
+  `avatar` varchar(124) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `given_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `family_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `nickname` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `email` varchar(254) NOT NULL,
-  `phone` varchar(16) NOT NULL,
-  `birthday` date NOT NULL,
+  `phone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
   `gender` tinyint(1) DEFAULT NULL,
-  `citizenship` varchar(50) NOT NULL,
+  `citizenship` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `salt` varchar(32) NOT NULL,
-  `derived_key` varchar(32) DEFAULT NULL,
+  `derived_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pasport_id` varchar(36) DEFAULT NULL,
-  `is_verified` tinyint(1) NOT NULL DEFAULT (false),
+  `is_verified` tinyint(1) NOT NULL DEFAULT '0',
   `balance` decimal(10,2) NOT NULL DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -161,9 +163,9 @@ CREATE TABLE `client_data` (
 -- Дамп данных таблицы `client_data`
 --
 
-INSERT INTO `client_data` (`id`, `avatar`, `real_name`, `nickname`, `email`, `phone`, `birthday`, `gender`, `citizenship`, `salt`, `derived_key`, `pasport_id`, `is_verified`, `balance`) VALUES
-('85494869-46fd-4fa7-8aa2-44ff4b27a5b9', 'string', 'Ihor', 'ihor', 'ihor.kuzubov@gmail.com', '+380997696627', '2005-01-19', 1, 'Oleksandria', 'CF9DD156CAD9B7995FF98BCBF071BCC4', 'F40A285D5A30735ED734E1CBFB141B57', NULL, 0, 0.00),
-('cd724ffe-1bca-4337-8c66-7d5c0b337f33', 'string', 'Ihor', 'ihor', 'ihor.kuzubov@gmail.com', '+380997699627', '2024-08-07', 1, 'Oleksandria', '55C06F283F454F87A2736D31CE2EE48A', '981D15079422B1A4DB7B41436004F0A4', NULL, 0, 0.00);
+INSERT INTO `client_data` (`id`, `gmail_id`, `avatar`, `given_name`, `family_name`, `nickname`, `email`, `phone`, `birthday`, `gender`, `citizenship`, `salt`, `derived_key`, `pasport_id`, `is_verified`, `balance`) VALUES
+('964b5872-dc2a-4f0e-b3f1-b37cc8a40774', '110887466608559061061', 'https://lh3.googleusercontent.com/a/ACg8ocJriNf-MphpAmDYNeXcPwcB7ZuRfIbzujyoXzsHwh8dvtdghQ=s96-c', 'Booking', 'Testing', 'bookingtesting73@gmail.com', 'bookingtesting73@gmail.com', '', NULL, NULL, '', 'F61C2EAEFF9CC7664A33F865B23FC086', '9F94826F70E9A5CF660FAB7DF808B00B', NULL, 0, 0.00),
+('b70dcd9b-0fef-47f3-beab-ff0d51646fb5', NULL, 'e74f3ff4-efa1-4d9c-b5ac-89821a6ff12c.png', NULL, NULL, 'ihor', 'ihor.kuzubov@gmail.com', '', NULL, 1, '', 'C2F2686300D2DB9BEEF4957535EB0681', '9F6BB6AD6A2A1A46A30822855D33A3CA', NULL, 0, 0.00);
 
 -- --------------------------------------------------------
 
@@ -309,11 +311,23 @@ CREATE TABLE `rooms_info` (
 
 CREATE TABLE `tokens` (
   `id` varchar(36) NOT NULL,
-  `token` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `salt` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `id_user` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `token_created` datetime NOT NULL DEFAULT (now()),
   `token_used` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `tokens`
+--
+
+INSERT INTO `tokens` (`id`, `salt`, `id_user`, `token_created`, `token_used`) VALUES
+('33c0c306-6a18-459a-88e9-1ee05cc5bc35', 'd071b35d-039f-4c37-89d2-f3824a090984', 'b70dcd9b-0fef-47f3-beab-ff0d51646fb5', '2024-10-10 12:23:29', '2024-10-10 12:23:57'),
+('3403e341-2e4f-4f9a-aace-5ddb20428cad', '63f7f9cc-e512-4e38-be67-def25f78416c', 'b70dcd9b-0fef-47f3-beab-ff0d51646fb5', '2024-10-10 11:47:42', '2024-10-10 12:10:13'),
+('7b8799ae-9413-46eb-8513-a02815e099b6', '7f505ac6-3a90-4b0e-9cd8-7c6f36d4afb8', '964b5872-dc2a-4f0e-b3f1-b37cc8a40774', '2024-10-10 11:41:13', '2024-10-10 11:47:35'),
+('840cdfe1-2e62-4e94-b6d1-01b3ab02bbf3', '0552a9ec-9a2b-4084-a914-f926d9e01103', 'b70dcd9b-0fef-47f3-beab-ff0d51646fb5', '2024-10-10 12:20:16', '2024-10-10 12:21:29'),
+('d72b0ff3-8b00-4b14-8770-39c17b94b13f', '9aafaa2f-5dd1-429e-be23-0108c176f053', '964b5872-dc2a-4f0e-b3f1-b37cc8a40774', '2024-10-10 11:31:55', '2024-10-10 11:40:36'),
+('df49f11d-86f8-42b4-b3fc-1a35be21cb71', 'e406103b-fcf9-4b72-a023-aa59964b2ebd', NULL, '2024-10-10 11:40:44', '2024-10-10 11:40:51');
 
 --
 -- Индексы сохранённых таблиц
@@ -382,6 +396,8 @@ ALTER TABLE `cities`
 --
 ALTER TABLE `client_data`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `nickname` (`nickname`),
   ADD UNIQUE KEY `unq_client_data_pasport_id` (`pasport_id`);
 
 --
